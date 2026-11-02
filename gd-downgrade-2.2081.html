@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Downgrade Geometry Dash to 2.2081</title>
+<style>
+  :root {
+    --bg: #f6f7fb; --card: #ffffff; --text: #1c2033; --muted: #5d6480;
+    --accent: #3b6cff; --accent-soft: #e6ecff; --border: #dfe3f0;
+    --code-bg: #12152a; --code-text: #e8ecff;
+    --warn-bg: #fff4dc; --warn-border: #f0c36a; --ok-bg: #e5f7ec; --ok-border: #77c795;
+    --bad-bg: #fde8e8; --bad-border: #e49a9a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1220; --card: #181c30; --text: #eceffa; --muted: #98a0c0;
+      --accent: #7b9bff; --accent-soft: #232a4d; --border: #2a3050;
+      --code-bg: #0a0c18; --code-text: #e8ecff;
+      --warn-bg: #3a2f14; --warn-border: #8a6a1f; --ok-bg: #153024; --ok-border: #2f7a52;
+      --bad-bg: #3a1a1a; --bad-border: #8a3a3a;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 1.9rem; line-height: 1.25; margin: 0 0 6px; }
+  .sub { color: var(--muted); margin: 0 0 20px; }
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 18px 20px; margin: 16px 0;
+  }
+  .card h2 { margin: 0 0 8px; font-size: 1.15rem; display: flex; align-items: center; gap: 10px; }
+  .num {
+    flex: none; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: .9rem; font-weight: 700;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; margin-top: 10px; }
+  .fact { background: var(--accent-soft); border-radius: 10px; padding: 10px 12px; }
+  .fact span { display: block; font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  .fact b { font-family: ui-monospace, Consolas, monospace; font-size: .95rem; word-break: break-all; }
+
+  /* Tabs */
+  .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 4px; }
+  .tab {
+    border: 1px solid var(--border); background: var(--card); color: var(--text);
+    padding: 8px 16px; border-radius: 999px; font-size: .95rem; cursor: pointer; font-family: inherit;
+  }
+  .tab[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+  .js .panel { display: none; }
+  .js .panel.active { display: block; }
+  .panel > h2.ptitle { font-size: 1.3rem; margin: 22px 0 0; }
+  .no-js-title { display: block; }
+  .js .no-js-title { display: none; }
+
+  .code { position: relative; margin: 10px 0; }
+  pre {
+    margin: 0; background: var(--code-bg); color: var(--code-text);
+    padding: 14px 84px 14px 14px; border-radius: 10px; overflow-x: auto;
+    font: .88rem/1.5 ui-monospace, Consolas, monospace; white-space: pre-wrap; word-break: break-all;
+  }
+  button.copy {
+    position: absolute; top: 8px; right: 8px; border: 0; border-radius: 8px;
+    background: var(--accent); color: #fff; padding: 6px 12px; font-size: .8rem; cursor: pointer;
+  }
+  button.copy:hover { filter: brightness(1.1); }
+  code.inline {
+    background: var(--accent-soft); padding: 1px 6px; border-radius: 5px;
+    font: .88em ui-monospace, Consolas, monospace; word-break: break-word;
+  }
+  .note { border-radius: 10px; padding: 10px 14px; margin: 12px 0 0; font-size: .95rem; border: 1px solid; }
+  .warn { background: var(--warn-bg); border-color: var(--warn-border); }
+  .ok { background: var(--ok-bg); border-color: var(--ok-border); }
+  .bad { background: var(--bad-bg); border-color: var(--bad-border); }
+  ul, ol { padding-left: 22px; margin: 8px 0; }
+  li { margin: 4px 0; }
+  details { margin: 8px 0; }
+  summary { cursor: pointer; font-weight: 600; }
+  footer { color: var(--muted); font-size: .85rem; margin-top: 28px; }
+  footer a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Downgrade Geometry Dash from 2.209 to 2.2081</h1>
+  <p class="sub">Pick your platform below. Windows, macOS and Linux use Steam; Android uses Aurora Store; iOS works differently.</p>
+
+  <div class="card">
+    <h2>Key numbers (Steam)</h2>
+    <div class="facts">
+      <div class="fact"><span>App ID</span><b>322170</b></div>
+      <div class="fact"><span>Depot: Windows / Linux</span><b>322171</b></div>
+      <div class="fact"><span>Manifest: Windows / Linux</span><b>3816559102876907245</b></div>
+      <div class="fact"><span>Depot: macOS</span><b>322172</b></div>
+      <div class="fact"><span>Manifest: macOS</span><b>8780295549609362522</b></div>
+      <div class="fact"><span>Android version code</span><b>41</b></div>
+    </div>
+    <div class="note warn"><b>Why people do this:</b> mods (Geode) often lag behind a new game version, so rolling back to 2.2081 gets them working again.</div>
+  </div>
+
+  <div class="tabs" role="tablist" aria-label="Platform">
+    <button class="tab" role="tab" data-tab="windows">Windows</button>
+    <button class="tab" role="tab" data-tab="macos">macOS</button>
+    <button class="tab" role="tab" data-tab="linux">Linux</button>
+    <button class="tab" role="tab" data-tab="android">Android</button>
+    <button class="tab" role="tab" data-tab="ios">iOS</button>
+  </div>
+
+  <!-- ===================== WINDOWS ===================== -->
+  <section class="panel" id="panel-windows" role="tabpanel">
+    <h2 class="ptitle no-js-title">Windows</h2>
+    <p class="sub">Steam console method. You must own Geometry Dash on Steam.</p>
+
+    <div class="card">
+      <h2><span class="num">0</span> Back up your save (recommended)</h2>
+      <p>Press <code class="inline">Win + R</code>, paste the path below, and copy the whole folder somewhere safe. Also sync your account data to the cloud in-game.</p>
+      <div class="code"><pre id="w0">%localappdata%\GeometryDash</pre><button class="copy" data-target="w0">Copy</button></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">1</span> Close the game and open the Steam console</h2>
+      <p>Fully close Geometry Dash. Then press <code class="inline">Win + R</code> and run:</p>
+      <div class="code"><pre id="w1">steam://open/console</pre><button class="copy" data-target="w1">Copy</button></div>
+      <p>Steam opens on its <b>Console</b> tab. If nothing happens, open Steam first and run it again.</p>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">2</span> Download the 2.2081 files</h2>
+      <p>Paste this into the Steam console and press Enter:</p>
+      <div class="code"><pre id="w2">download_depot 322170 322171 3816559102876907245</pre><button class="copy" data-target="w2">Copy</button></div>
+      <p>Wait until the console says the download is complete. The files land in:</p>
+      <div class="code"><pre id="w2b">Steam\steamapps\content\app_322170\depot_322171</pre><button class="copy" data-target="w2b">Copy</button></div>
+      <p>Typical full path: <code class="inline">C:\Program Files (x86)\Steam\steamapps\content\app_322170\depot_322171</code> (your Steam library may be elsewhere).</p>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">3</span> Open the game folder</h2>
+      <ol>
+        <li>In Steam, right-click <b>Geometry Dash</b> &rarr; <b>Properties</b>.</li>
+        <li>Go to <b>Installed Files</b> &rarr; <b>Browse</b>.</li>
+      </ol>
+      <p>Keep this window open next to the depot folder from step 2.</p>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">4</span> Copy the old files over the new ones</h2>
+      <ol>
+        <li>Open the <code class="inline">depot_322171</code> folder and select everything inside (<code class="inline">Ctrl + A</code>).</li>
+        <li>Drag or paste it into the Geometry Dash game folder.</li>
+        <li>Choose <b>Replace the files in the destination</b> when asked.</li>
+      </ol>
+      <div class="note warn">If you use mods, keep a copy of your <code class="inline">geode</code> folder and mod files first. Overwriting can break an install that was built for 2.209.</div>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">5</span> Stop Steam from updating it again</h2>
+      <ol>
+        <li>Open the game folder (step 3), then go up two levels (<code class="inline">Geometry Dash</code> &rarr; <code class="inline">common</code>) to reach <code class="inline">steamapps</code>.</li>
+        <li>Right-click <code class="inline">appmanifest_322170.acf</code> &rarr; <b>Properties</b> &rarr; tick <b>Read-only</b> &rarr; <b>OK</b>.</li>
+      </ol>
+      <div class="note warn">If the game still gets updated, launch it by running <code class="inline">GeometryDash.exe</code> directly from its folder instead of through Steam.</div>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">6</span> Launch and check the version</h2>
+      <p>Start Geometry Dash and confirm the version shown in-game is <b>2.2081</b>.</p>
+      <div class="note ok">Done. If you use Geode, install a Geode build and mods that support 2.2081.</div>
+    </div>
+
+    <div class="card">
+      <h2>Updating back to 2.209</h2>
+      <ol>
+        <li>Untick <b>Read-only</b> on <code class="inline">appmanifest_322170.acf</code>.</li>
+        <li>In Steam: <b>Geometry Dash</b> &rarr; <b>Properties</b> &rarr; <b>Installed Files</b> &rarr; <b>Verify integrity of game files</b>.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h2>Troubleshooting</h2>
+      <details>
+        <summary>The game crashes on launch</summary>
+        <ul>
+          <li>Reinstall Geode and your mods for 2.2081, or temporarily move the Geode files out of the game folder to test the vanilla game.</li>
+          <li>Make sure you copied <i>all</i> files from the depot, not just the .exe.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>The console command does nothing or errors</summary>
+        <ul>
+          <li>Make sure you're logged in to the Steam account that owns Geometry Dash.</li>
+          <li>Check for typos; the Windows manifest ID is <code class="inline">3816559102876907245</code>.</li>
+        </ul>
+      </details>
+    </div>
+  </section>
+
+  <!-- ===================== MACOS ===================== -->
+  <section class="panel" id="panel-macos" role="tabpanel">
+    <h2 class="ptitle no-js-title">macOS</h2>
+    <p class="sub">Steam console method with the Mac depot. You must own Geometry Dash on Steam.</p>
+
+    <div class="note bad"><b>Geode data will be lost when you downgrade on a Mac.</b> Back up anything important first, and sync your account data to the cloud in-game.</div>
+
+    <div class="card">
+      <h2><span class="num">1</span> Open the Steam console</h2>
+      <p>Type this into the address bar of Safari (or another browser) and allow it to open Steam:</p>
+      <div class="code"><pre id="m1">steam://open/console</pre><button class="copy" data-target="m1">Copy</button></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">2</span> Download the Mac files</h2>
+      <p>Paste into the console, press Enter, and wait for the download to finish. Note the Mac depot ID (<b>322172</b>) and manifest differ from Windows.</p>
+      <div class="code"><pre id="m2">download_depot 322170 322172 8780295549609362522</pre><button class="copy" data-target="m2">Copy</button></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">3</span> Show hidden files in Finder</h2>
+      <p>Open Finder and press <code class="inline">Cmd + Shift + .</code> to show hidden files (press it again later to hide them).</p>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">4</span> Copy GeometryDash.app into the game folder</h2>
+      <p>Copy <code class="inline">GeometryDash.app</code> from the download location:</p>
+      <div class="code"><pre id="m4a">~/Library/Application Support/Steam/Steam.AppBundle/Steam/Contents/MacOS/steamapps/content/app_322170/depot_322172/GeometryDash.app</pre><button class="copy" data-target="m4a">Copy</button></div>
+      <p>Paste it here and choose <b>Replace</b> when asked:</p>
+      <div class="code"><pre id="m4b">~/Library/Application Support/Steam/steamapps/common/Geometry Dash</pre><button class="copy" data-target="m4b">Copy</button></div>
+      <div class="note warn">This assumes Steam is installed in the default location. If your game is stored elsewhere, adjust the paths.</div>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">5</span> Stop Steam from updating it again</h2>
+      <ol>
+        <li>In Finder, go to <code class="inline">~/Library/Application Support/Steam/steamapps</code>.</li>
+        <li>Right-click <code class="inline">appmanifest_322170.acf</code> &rarr; <b>Get Info</b> &rarr; tick <b>Locked</b>.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">6</span> Launch and check the version</h2>
+      <p>Launch Geometry Dash through Steam and confirm it shows <b>2.2081</b>. If you use Geode, install a build that supports 2.2081.</p>
+      <div class="note warn">If Steam updates the game anyway, launch <code class="inline">GeometryDash.app</code> directly from the game folder, or temporarily remove <b>Locked</b>, update, then repeat this guide.</div>
+    </div>
+
+    <div class="card">
+      <h2>Updating back to 2.209</h2>
+      <ol>
+        <li>Remove <b>Locked</b> from <code class="inline">appmanifest_322170.acf</code>.</li>
+        <li>In Steam: right-click <b>Geometry Dash</b> &rarr; <b>Properties</b> &rarr; <b>Installed Files</b> &rarr; <b>Verify integrity of game files</b>.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===================== LINUX ===================== -->
+  <section class="panel" id="panel-linux" role="tabpanel">
+    <h2 class="ptitle no-js-title">Linux</h2>
+    <p class="sub">Uses DepotDownloader because the Steam console isn't used here. You must own Geometry Dash on Steam.</p>
+
+    <div class="card">
+      <h2><span class="num">1</span> Get DepotDownloader</h2>
+      <p>Download it from the <a href="https://github.com/SteamRE/DepotDownloader/releases" target="_blank" rel="noopener">DepotDownloader releases page</a> and extract the ZIP. Pick the build for your CPU:</p>
+      <ul>
+        <li><code class="inline">linux-x64</code>: 64-bit Intel/AMD</li>
+        <li><code class="inline">linux-arm64</code>: 64-bit ARM</li>
+        <li><code class="inline">linux-arm</code>: 32-bit ARM</li>
+      </ul>
+      <p>Then open a terminal in the extracted folder (<code class="inline">cd</code> into it).</p>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">2</span> Download the 2.2081 depot</h2>
+      <p>Option A: log in with your Steam username and password (replace the placeholders):</p>
+      <div class="code"><pre id="l2a">./DepotDownloader -app 322170 -depot 322171 -manifest 3816559102876907245 -username [USERNAME] -password [PASSWORD]</pre><button class="copy" data-target="l2a">Copy</button></div>
+      <p>Option B: log in with a Steam Guard QR code instead of a password:</p>
+      <div class="code"><pre id="l2b">./DepotDownloader -app 322170 -depot 322171 -manifest 3816559102876907245 -qr</pre><button class="copy" data-target="l2b">Copy</button></div>
+      <p>Add <code class="inline">-remember-password</code> to option A if you want it to remember your login. DepotDownloader is open source and only sends your login to Steam, but it's still a third-party tool, so use it at your own discretion. Wait for the download to finish.</p>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">3</span> Copy the files into the game folder</h2>
+      <ol>
+        <li>In the folder DepotDownloader created (<code class="inline">322170</code>), open the folder inside it and copy <b>everything inside</b>.</li>
+        <li>In Steam: right-click <b>Geometry Dash</b> &rarr; <b>Manage</b> &rarr; <b>Browse local files</b>.</li>
+        <li>Paste the files there and replace existing files when asked.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">4</span> Stop Steam from updating it again</h2>
+      <p>From the game folder, go up two levels (<code class="inline">Geometry Dash</code> &rarr; <code class="inline">common</code>) to <code class="inline">steamapps</code>, open a terminal there, and run:</p>
+      <div class="code"><pre id="l4">chmod 444 appmanifest_322170.acf</pre><button class="copy" data-target="l4">Copy</button></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">5</span> Launch and check the version</h2>
+      <p>Launch through Steam and confirm <b>2.2081</b>. If you use Geode, install a build that supports 2.2081.</p>
+      <div class="note warn">If Steam updates the game anyway, launch <code class="inline">GeometryDash.exe</code> from the game folder, or run <code class="inline">chmod 644 appmanifest_322170.acf</code> to allow an update, then repeat this guide.</div>
+    </div>
+
+    <div class="card">
+      <h2>Updating back to 2.209</h2>
+      <ol>
+        <li>Run <code class="inline">chmod 644 appmanifest_322170.acf</code> in the <code class="inline">steamapps</code> folder.</li>
+        <li>In Steam: <b>Geometry Dash</b> &rarr; <b>Properties</b> &rarr; <b>Installed Files</b> &rarr; <b>Verify integrity of game files</b>.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===================== ANDROID ===================== -->
+  <section class="panel" id="panel-android" role="tabpanel">
+    <h2 class="ptitle no-js-title">Android</h2>
+    <p class="sub">Uses Aurora Store to install an older Play Store build. You must own Geometry Dash on Google Play.</p>
+
+    <div class="note bad"><b>Read first:</b> vanilla (unmodded) save data is erased when you uninstall, so save your account data to the cloud first. This method is technically against Google's terms of service, so proceed at your own risk.</div>
+
+    <div class="card">
+      <h2><span class="num">1</span> Save your data to the cloud</h2>
+      <p>In Geometry Dash, open your account settings and save your data to the cloud before doing anything else.</p>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">2</span> Install Aurora Store</h2>
+      <p>Download and install the latest APK from the <a href="https://auroraoss.com/files" target="_blank" rel="noopener">official Aurora Store files page</a>. Android may ask you to allow installs from your browser or file manager.</p>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">3</span> Uninstall Geometry Dash</h2>
+      <p>Uninstall the current Geometry Dash from your device. Android won't let a normal install replace a newer version with an older one.</p>
+      <div class="note warn">Geode save data is not erased, but all vanilla Geometry Dash save data is.</div>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">4</span> Download version 2.2081 with Aurora</h2>
+      <ol>
+        <li>Open Aurora Store and sign in with the <b>same Google account</b> you bought Geometry Dash with.</li>
+        <li>Search for <b>Geometry Dash</b> and open its page.</li>
+        <li>Tap the three-dot menu (top right) &rarr; <b>Manual Download</b>.</li>
+        <li>Enter this version code and tap <b>Install</b>:
+          <div class="code"><pre id="a4">41</pre><button class="copy" data-target="a4">Copy</button></div>
+        </li>
+        <li>When Android prompts you, tap <b>Install</b> a second time.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">5</span> Restore your save</h2>
+      <p>Open Geometry Dash (or Geode) and restore your cloud save. You should not lose progress. Geode Launcher can now load Geometry Dash.</p>
+      <div class="note ok">Done. Check the version in-game shows <b>2.2081</b>.</div>
+    </div>
+
+    <div class="card">
+      <h2>Updating back to 2.209</h2>
+      <p>Update Geometry Dash through Aurora Store.</p>
+    </div>
+
+    <div class="card">
+      <h2>Safety tip</h2>
+      <p>You'll find many "Geometry Dash 2.2081.apk" files on sites like itch.io. Those are unofficial uploads, so avoid them. The Aurora method above downloads the build tied to your own purchase.</p>
+    </div>
+  </section>
+
+  <!-- ===================== IOS ===================== -->
+  <section class="panel" id="panel-ios" role="tabpanel">
+    <h2 class="ptitle no-js-title">iOS (iPhone / iPad)</h2>
+    <p class="sub">Downgrading on iOS is much more restricted than on other platforms.</p>
+
+    <div class="note bad"><b>The old manual method for downgrading Geometry Dash on iOS no longer works.</b></div>
+
+    <div class="card">
+      <h2>What works now</h2>
+      <p>If you use <b>Geode</b> on iOS, Geode Launcher automatically downloads the latest version of Geometry Dash that it supports (currently <b>2.2081</b>). So you don't need to downgrade by hand: install and open Geode Launcher and let it fetch the supported version.</p>
+      <ul>
+        <li>Without Geode, I couldn't find a working way to roll back the App Store version.</li>
+        <li>Downgrading your whole iOS system is not a fix for this and carries its own risks, so it isn't covered here.</li>
+        <li>Avoid random "Geometry Dash IPA" download sites; they're unofficial and can be unsafe.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    Manifest IDs, version code and steps cross-checked against the community
+    <a href="https://beatacvr.github.io/downgrade/" target="_blank" rel="noopener">GD 2.2081 Downgrade Guides</a>
+    (Windows, macOS, Android, Linux, iOS), Steam Community discussion posts, and
+    <a href="https://fbmod.com/downgrade/" target="_blank" rel="noopener">FB Mods</a>.
+    DepotDownloader and Aurora Store are third-party tools; use them at your own discretion.
+  </footer>
+</div>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    root.classList.add('js');
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+    var panels = {};
+    document.querySelectorAll('.panel').forEach(function (p) {
+      panels[p.id.replace('panel-', '')] = p;
+    });
+
+    function show(name) {
+      if (!panels[name]) name = 'windows';
+      Object.keys(panels).forEach(function (k) {
+        panels[k].classList.toggle('active', k === name);
+      });
+      tabs.forEach(function (t) {
+        t.setAttribute('aria-selected', t.dataset.tab === name ? 'true' : 'false');
+      });
+      try { history.replaceState(null, '', '#' + name); } catch (e) {}
+    }
+
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function () { show(t.dataset.tab); });
+    });
+
+    var start = (location.hash || '').replace('#', '');
+    if (!start) {
+      var ua = navigator.userAgent || '';
+      if (/Android/i.test(ua)) start = 'android';
+      else if (/iPhone|iPad|iPod/i.test(ua)) start = 'ios';
+      else if (/Mac/i.test(ua)) start = 'macos';
+      else if (/Linux|X11/i.test(ua)) start = 'linux';
+      else start = 'windows';
+    }
+    show(start);
+
+    document.querySelectorAll('button.copy').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var text = document.getElementById(btn.dataset.target).innerText.trim();
+        var done = function () {
+          btn.textContent = 'Copied!';
+          setTimeout(function () { btn.textContent = 'Copy'; }, 1500);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done, done);
+        } else {
+          var ta = document.createElement('textarea');
+          ta.value = text; document.body.appendChild(ta); ta.select();
+          try { document.execCommand('copy'); } catch (e) {}
+          document.body.removeChild(ta); done();
+        }
+      });
+    });
+  })();
+</script>
+</body>
+</html>
